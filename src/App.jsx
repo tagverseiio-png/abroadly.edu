@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import CountryDetails from './pages/CountryDetails';
+import { countriesData } from './data/countriesData';
+import { universitiesData } from './data/universitiesData';
 import { 
   MapPin, 
   Globe, 
@@ -19,8 +23,9 @@ import {
 } from 'lucide-react';
 import AtlasChat from './AtlasChat';
 
-export default function App() {
+function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -49,47 +54,8 @@ export default function App() {
     { label: "Visa Success Rate", value: "99%" },
   ];
 
-  const malaysianUniversities = [
-    { name: "Asia Pacific University (APU)", tag: "Tech & Business", match: "Dream", roi: "High ROI", desc: "Premium tech and business education with unparalleled 100% employability.", courses: ["IT, AI & Cyber Security", "Accounting & FinTech", "Engineering"], location: "Kuala Lumpur", fees: "$6,500/yr", intakes: "Feb, May, Sep" },
-    { name: "INTI International University", tag: "Global Pathways", match: "Moderate", roi: "Fast Payback", desc: "Diverse programs featuring exclusive US/UK transfer options.", courses: ["American Degree Transfer", "Business & HR", "Design & Media"], location: "Subang Jaya", fees: "$5,500/yr", intakes: "Jan, May, Aug" },
-    { name: "SEGi University", tag: "Professional Focus", match: "Moderate", roi: "High ROI", desc: "Top choice for medical, law, and rigorous engineering degrees.", courses: ["MBBS & Pharmacy", "Law (UK Collab)", "Engineering"], location: "Kota Damansara", fees: "$6,000/yr", intakes: "Feb, Jun, Sep" },
-    { name: "University of Cyberjaya (UOC)", tag: "Healthcare Specialists", match: "Dream", roi: "Premium", desc: "Highly specialized in medical and psychological sciences.", courses: ["MBBS", "Pharmacy & Nursing", "Psychology"], location: "Cyberjaya", fees: "$7,200/yr", intakes: "Mar, Jul, Oct" },
-    { name: "TARUMT", tag: "Analytics & Engineering", match: "Safe", roi: "Max Value", desc: "Exceptional value combined with strong data and engineering faculties.", courses: ["Finance & Banking", "Data Science & IT", "Engineering"], location: "Kuala Lumpur", fees: "$3,800/yr", intakes: "May, Sep, Nov" },
-    { name: "UOW Malaysia", tag: "Australian Excellence", match: "Dream", roi: "Premium", desc: "Industry-aligned programs boasting global collaborations.", courses: ["Computer Science", "Hospitality", "Business & Accounting"], location: "Shah Alam", fees: "$7,500/yr", intakes: "Jan, Apr, Aug" },
-    { name: "MAHSA University", tag: "Healthcare Giant", match: "Moderate", roi: "High ROI", desc: "The ultimate destination for hardcore, intensive medical training.", courses: ["MBBS (5 Years)", "Dentistry", "Physiotherapy & Biomedical"], location: "Bandar Saujana Putra", fees: "$8,000/yr", intakes: "Feb, Sep" },
-    { name: "UNITAR University", tag: "Modern Learning", match: "Safe", roi: "Fast Payback", desc: "Ideal for contemporary learners and ambitious working professionals.", courses: ["Business & Management", "Education / TESL", "IT & Design"], location: "Petaling Jaya", fees: "$4,500/yr", intakes: "Jan, May, Sep" }
-  ];
-
-  const destinations = [
-    { 
-      name: "Malaysia", 
-      flag: "🇲🇾",
-      image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=800",
-      universities: ["Asia Pacific University", "INTI International", "MAHSA University", "SEGi University", "University of Wollongong"],
-      courses: ["IT & AI", "Business Management", "Engineering", "Medicine"]
-    },
-    { 
-      name: "Russia", 
-      flag: "🇷🇺",
-      image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?auto=format&fit=crop&q=80&w=800",
-      universities: ["Pirogov National Medical", "First Moscow State", "Dagestan State Medical", "Tomsk Polytechnic"],
-      courses: ["MBBS / Medicine", "Aviation Engineering", "Oil & Tech", "Pedagogy"]
-    },
-    { 
-      name: "Poland", 
-      flag: "🇵🇱",
-      image: "https://images.unsplash.com/photo-1519197924294-4ba991a11128?auto=format&fit=crop&q=80&w=800",
-      universities: ["Medical Univ. of Silesia", "Nicolaus Copernicus", "Warsaw Univ. of Business", "SWPS University"],
-      courses: ["Medicine", "Psychology", "Business", "IT & Design"]
-    },
-    { 
-      name: "Georgia", 
-      flag: "🇬🇪",
-      image: "https://images.unsplash.com/photo-1583002621021-39e802a24683?auto=format&fit=crop&q=80&w=800",
-      universities: ["Alte University", "East European University", "Caucasus International", "Georgian National"],
-      courses: ["MBBS / Medicine", "Business", "International Relations"]
-    }
-  ];
+  const malaysianUniversities = universitiesData.filter(u => u.country === 'malaysia');
+  const destinations = countriesData;
 
   const process = [
     { icon: <Bot className="w-6 h-6 text-emerald-600" />, title: "AI Predictive Matching", desc: "Our algorithm matches your budget and grades to the perfect university." },
@@ -387,6 +353,13 @@ export default function App() {
                       ))}
                     </ul>
                   </div>
+
+                  <button 
+                    onClick={() => navigate(`/country/${dest.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)}
+                    className="mt-6 w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-300"
+                  >
+                    Explore Colleges &rarr;
+                  </button>
                 </div>
               </div>
             ))}
@@ -665,5 +638,16 @@ export default function App() {
       {/* Atlas AI Chat Widget */}
       <AtlasChat />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/country/:slug" element={<CountryDetails />} />
+      </Routes>
+    </Router>
   );
 }

@@ -19,12 +19,25 @@ import {
   LineChart,
   FileCheck,
   MessageCircle,
-  TrendingUp
+  TrendingUp,
+  Loader2
 } from 'lucide-react';
+import AtlasChat from './AtlasChat';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
+  const handleMatchMe = (e) => {
+    e.preventDefault();
+    setIsAnalyzing(true);
+    setTimeout(() => {
+      setIsAnalyzing(false);
+      setShowResults(true);
+    }, 2000);
+  };
 
   // Handle scroll effect for navigation
   useEffect(() => {
@@ -42,14 +55,14 @@ export default function App() {
   ];
 
   const malaysianUniversities = [
-    { name: "Asia Pacific University (APU)", tag: "Tech & Business", match: "Dream", roi: "High ROI", desc: "Premium tech and business education with unparalleled 100% employability.", courses: ["IT, AI & Cyber Security", "Accounting & FinTech", "Engineering"] },
-    { name: "INTI International University", tag: "Global Pathways", match: "Moderate", roi: "Fast Payback", desc: "Diverse programs featuring exclusive US/UK transfer options.", courses: ["American Degree Transfer", "Business & HR", "Design & Media"] },
-    { name: "SEGi University", tag: "Professional Focus", match: "Moderate", roi: "High ROI", desc: "Top choice for medical, law, and rigorous engineering degrees.", courses: ["MBBS & Pharmacy", "Law (UK Collab)", "Engineering"] },
-    { name: "University of Cyberjaya (UOC)", tag: "Healthcare Specialists", match: "Dream", roi: "Premium", desc: "Highly specialized in medical and psychological sciences.", courses: ["MBBS", "Pharmacy & Nursing", "Psychology"] },
-    { name: "TARUMT", tag: "Analytics & Engineering", match: "Safe", roi: "Max Value", desc: "Exceptional value combined with strong data and engineering faculties.", courses: ["Finance & Banking", "Data Science & IT", "Engineering"] },
-    { name: "UOW Malaysia", tag: "Australian Excellence", match: "Dream", roi: "Premium", desc: "Industry-aligned programs boasting global collaborations.", courses: ["Computer Science", "Hospitality", "Business & Accounting"] },
-    { name: "MAHSA University", tag: "Healthcare Giant", match: "Moderate", roi: "High ROI", desc: "The ultimate destination for hardcore, intensive medical training.", courses: ["MBBS (5 Years)", "Dentistry", "Physiotherapy & Biomedical"] },
-    { name: "UNITAR University", tag: "Modern Learning", match: "Safe", roi: "Fast Payback", desc: "Ideal for contemporary learners and ambitious working professionals.", courses: ["Business & Management", "Education / TESL", "IT & Design"] }
+    { name: "Asia Pacific University (APU)", tag: "Tech & Business", match: "Dream", roi: "High ROI", desc: "Premium tech and business education with unparalleled 100% employability.", courses: ["IT, AI & Cyber Security", "Accounting & FinTech", "Engineering"], location: "Kuala Lumpur", fees: "$6,500/yr", intakes: "Feb, May, Sep" },
+    { name: "INTI International University", tag: "Global Pathways", match: "Moderate", roi: "Fast Payback", desc: "Diverse programs featuring exclusive US/UK transfer options.", courses: ["American Degree Transfer", "Business & HR", "Design & Media"], location: "Subang Jaya", fees: "$5,500/yr", intakes: "Jan, May, Aug" },
+    { name: "SEGi University", tag: "Professional Focus", match: "Moderate", roi: "High ROI", desc: "Top choice for medical, law, and rigorous engineering degrees.", courses: ["MBBS & Pharmacy", "Law (UK Collab)", "Engineering"], location: "Kota Damansara", fees: "$6,000/yr", intakes: "Feb, Jun, Sep" },
+    { name: "University of Cyberjaya (UOC)", tag: "Healthcare Specialists", match: "Dream", roi: "Premium", desc: "Highly specialized in medical and psychological sciences.", courses: ["MBBS", "Pharmacy & Nursing", "Psychology"], location: "Cyberjaya", fees: "$7,200/yr", intakes: "Mar, Jul, Oct" },
+    { name: "TARUMT", tag: "Analytics & Engineering", match: "Safe", roi: "Max Value", desc: "Exceptional value combined with strong data and engineering faculties.", courses: ["Finance & Banking", "Data Science & IT", "Engineering"], location: "Kuala Lumpur", fees: "$3,800/yr", intakes: "May, Sep, Nov" },
+    { name: "UOW Malaysia", tag: "Australian Excellence", match: "Dream", roi: "Premium", desc: "Industry-aligned programs boasting global collaborations.", courses: ["Computer Science", "Hospitality", "Business & Accounting"], location: "Shah Alam", fees: "$7,500/yr", intakes: "Jan, Apr, Aug" },
+    { name: "MAHSA University", tag: "Healthcare Giant", match: "Moderate", roi: "High ROI", desc: "The ultimate destination for hardcore, intensive medical training.", courses: ["MBBS (5 Years)", "Dentistry", "Physiotherapy & Biomedical"], location: "Bandar Saujana Putra", fees: "$8,000/yr", intakes: "Feb, Sep" },
+    { name: "UNITAR University", tag: "Modern Learning", match: "Safe", roi: "Fast Payback", desc: "Ideal for contemporary learners and ambitious working professionals.", courses: ["Business & Management", "Education / TESL", "IT & Design"], location: "Petaling Jaya", fees: "$4,500/yr", intakes: "Jan, May, Sep" }
   ];
 
   const destinations = [
@@ -204,7 +217,7 @@ export default function App() {
               </h3>
               <p className="text-slate-500 mb-6 text-sm font-medium">Get your Top 3 personalized university recommendations instantly.</p>
               
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={handleMatchMe}>
                 <div className="space-y-3.5">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -267,8 +280,16 @@ export default function App() {
                   </div>
                 </div>
                 
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg py-3.5 font-bold text-base transition-all shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 mt-5">
-                  Analyze & Match Me <ChevronRight className="w-5 h-5" />
+                <button 
+                  type="submit"
+                  disabled={isAnalyzing}
+                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-400 disabled:cursor-not-allowed text-white rounded-lg py-3.5 font-bold text-base transition-all shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 mt-5"
+                >
+                  {isAnalyzing ? (
+                    <><Loader2 className="w-5 h-5 animate-spin" /> Analyzing Profile...</>
+                  ) : (
+                    <>Analyze & Match Me <ChevronRight className="w-5 h-5" /></>
+                  )}
                 </button>
                 <p className="text-center text-[10px] text-slate-500 font-bold mt-3 flex items-center justify-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-emerald-500" /> Matches will be sent via WhatsApp securely.
@@ -404,8 +425,12 @@ export default function App() {
 
                 <div className="mb-4">
                   <h3 className="text-lg font-extrabold text-slate-900 mb-2 leading-tight">{uni.name}</h3>
-                  <div className="flex items-center gap-1 mb-3 text-xs font-bold text-orange-600">
+                  <div className="flex items-center gap-1 mb-2 text-xs font-bold text-orange-600">
                     <TrendingUp className="w-3.5 h-3.5" /> {uni.roi}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-emerald-500" /> {uni.location}</span>
+                    <span className="flex items-center gap-1"><LineChart className="w-3 h-3 text-emerald-500" /> {uni.fees}</span>
                   </div>
                   <p className="text-sm text-slate-600 font-medium leading-relaxed mb-4">{uni.desc}</p>
                 </div>
@@ -565,6 +590,85 @@ export default function App() {
         </div>
       </footer>
 
+      {/* Match Results Modal */}
+      {showResults && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowResults(false)}></div>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl relative z-10 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-sm z-20">
+              <h3 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                <Bot className="w-6 h-6 text-emerald-600" /> AI Match Results
+              </h3>
+              <button onClick={() => setShowResults(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="mb-6 bg-emerald-50 text-emerald-800 p-4 rounded-xl text-sm font-medium border border-emerald-100 flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <p>Based on your profile, we've analyzed 40+ universities and found the top 3 best matches that align with your budget, academic background, and career goals.</p>
+              </div>
+
+              <div className="space-y-4">
+                {malaysianUniversities.slice(0, 3).map((uni, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-xl p-5 hover:border-emerald-300 transition-all duration-300 relative overflow-hidden group hover:shadow-md">
+                    <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <h4 className="text-lg font-extrabold text-slate-900">{uni.name}</h4>
+                          {uni.match === "Dream" && <span className="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-200">Dream Target</span>}
+                          {uni.match === "Moderate" && <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-200">Moderate Hit</span>}
+                          {uni.match === "Safe" && <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-200">Safe Option</span>}
+                        </div>
+                        <p className="text-slate-500 text-sm font-medium mb-3">{uni.desc}</p>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+                          <div className="bg-slate-50 p-2 rounded-md border border-slate-100">
+                            <span className="block text-[9px] text-slate-400 font-bold uppercase">Location</span>
+                            <span className="text-xs font-semibold text-slate-700">{uni.location}</span>
+                          </div>
+                          <div className="bg-slate-50 p-2 rounded-md border border-slate-100">
+                            <span className="block text-[9px] text-slate-400 font-bold uppercase">Est. Fees</span>
+                            <span className="text-xs font-semibold text-slate-700">{uni.fees}</span>
+                          </div>
+                          <div className="bg-slate-50 p-2 rounded-md border border-slate-100 hidden md:block">
+                            <span className="block text-[9px] text-slate-400 font-bold uppercase">Intakes</span>
+                            <span className="text-xs font-semibold text-slate-700">{uni.intakes}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                           {uni.courses.map((c, i) => <span key={i} className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded border border-emerald-100">{c}</span>)}
+                        </div>
+
+                        <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          <span className="flex items-center gap-1 text-orange-600"><TrendingUp className="w-3.5 h-3.5" /> {uni.roi}</span>
+                          <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                          <span className="text-emerald-600">{uni.tag}</span>
+                        </div>
+                      </div>
+                      <button className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap shadow-md flex items-center justify-center gap-2">
+                         Get Full Report <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 text-center">
+                <button onClick={() => setShowResults(false)} className="text-slate-500 hover:text-slate-800 text-sm font-bold transition-colors">
+                  Close Results
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Atlas AI Chat Widget */}
+      <AtlasChat />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const ATLAS_SYSTEM = `You are Atlas — the Abroadly AI Study Advisor. You are a friendly, intelligent counsellor helping Indian students (especially from South India/Tamil Nadu) find the perfect course and university in Malaysia, primarily at Asia Pacific University (APU).
 

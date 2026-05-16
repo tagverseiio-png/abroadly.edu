@@ -153,5 +153,5 @@ When the student seems ready or interested, always end with:
 ---
 
 LANGUAGE NOTE
-Most users will write in English. Some may mix Tamil words or write informally — respond in the same casual tone. Never correct their grammar. Match their energy.
-\`;
+Most users will write in English. Some may mix Tamil words or write informally — respond in the same casual tone. Never correct their grammar.   Match their energy.
+`;

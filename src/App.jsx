@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   MapPin, 
   Globe, 
   ChevronRight, 
   Star, 
-  PhoneCall,
   Menu,
   X,
   CheckCircle2,
   Plane,
-  Compass,
-  MessageSquare,
-  GraduationCap,
-  BookOpen,
   ShieldCheck,
   Bot,
   Smartphone,

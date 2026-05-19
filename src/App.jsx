@@ -22,13 +22,15 @@ import {
   Loader2
 } from 'lucide-react';
 import AtlasChat from './AtlasChat';
-
+import ReportModal from './components/ReportModal';
 function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [selectedReportUniversities, setSelectedReportUniversities] = useState([]);
 
   const handleMatchMe = (e) => {
     e.preventDefault();
@@ -318,45 +320,33 @@ function Home() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="flex justify-center">
             {destinations.map((dest, idx) => (
-              <div key={idx} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
-                <div className="h-40 relative overflow-hidden">
+              <div key={idx} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col w-full max-w-[480px]">
+                <div className="h-48 relative overflow-hidden">
                   <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                   <div className="absolute bottom-4 left-4 flex items-center gap-3">
-                    <span className="text-3xl shadow-sm">{dest.flag}</span>
-                    <h3 className="text-xl font-extrabold text-white">{dest.name}</h3>
+                    <span className="text-4xl shadow-sm">{dest.flag}</span>
+                    <h3 className="text-2xl font-extrabold text-white">{dest.name}</h3>
                   </div>
                 </div>
                 
-                <div className="p-5 flex-1 flex flex-col">
+                <div className="p-6 flex-1 flex flex-col">
                   <div className="mb-4">
-                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">High ROI Fields</h4>
-                    <div className="flex flex-wrap gap-1.5">
+                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">High ROI Fields</h4>
+                    <div className="flex flex-wrap gap-2">
                       {dest.courses.map((course, i) => (
-                        <span key={i} className="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold border border-emerald-100">
+                        <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-md text-xs font-bold border border-emerald-100">
                           {course}
                         </span>
                       ))}
                     </div>
                   </div>
                   
-                  <div className="mt-auto">
-                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Top Partners</h4>
-                    <ul className="space-y-1.5">
-                      {dest.universities.slice(0, 3).map((uni, i) => (
-                        <li key={i} className="flex items-start gap-1.5 text-xs font-semibold text-slate-700">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="truncate">{uni}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
                   <button 
                     onClick={() => navigate(`/country/${dest.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)}
-                    className="mt-6 w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-300"
+                    className="mt-6 w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-300"
                   >
                     Explore Colleges &rarr;
                   </button>
@@ -517,9 +507,6 @@ function Home() {
               <h4 className="text-white font-extrabold text-lg mb-6">Destinations</h4>
               <ul className="space-y-3 text-sm font-bold">
                 <li><a href="#malaysia-partners" className="hover:text-emerald-500 transition-colors">Study in Malaysia</a></li>
-                <li><a href="#destinations" className="hover:text-emerald-500 transition-colors">Study in Russia</a></li>
-                <li><a href="#destinations" className="hover:text-emerald-500 transition-colors">Study in Poland</a></li>
-                <li><a href="#destinations" className="hover:text-emerald-500 transition-colors">Study in Baltics</a></li>
               </ul>
             </div>
 
@@ -617,7 +604,15 @@ function Home() {
                           <span className="text-emerald-600">{uni.tag}</span>
                         </div>
                       </div>
-                      <button className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap shadow-md flex items-center justify-center gap-2">
+                      <button 
+                        onClick={() => {
+                          // Put clicked uni first, then others
+                          const others = malaysianUniversities.slice(0, 3).filter(u => u.name !== uni.name);
+                          setSelectedReportUniversities([uni, ...others]);
+                          setShowReportModal(true);
+                        }}
+                        className="bg-slate-900 hover:bg-yellow-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap shadow-md flex items-center justify-center gap-2"
+                      >
                          Get Full Report <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -633,6 +628,14 @@ function Home() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Full Report Modal */}
+      {showReportModal && (
+        <ReportModal 
+          universities={selectedReportUniversities} 
+          onClose={() => setShowReportModal(false)} 
+        />
       )}
 
       {/* Atlas AI Chat Widget */}

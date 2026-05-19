@@ -57,7 +57,7 @@ export default function CountryDetails() {
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/logo.png" alt="Abroadly Logo" className="h-10 w-auto object-contain" />
+            <img src="/new-logo.png" alt="Abroadly Logo" className="h-10 w-auto object-contain" />
           </div>
           <button 
             onClick={() => navigate('/')}

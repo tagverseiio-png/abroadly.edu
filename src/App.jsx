@@ -86,7 +86,7 @@ function Home() {
             {/* Logo */}
             <div className="flex flex-col cursor-pointer">
               <div className="flex items-center">
-                <img src="/logo.png" alt="Abroadly Logo" className="h-16 w-auto object-contain" />
+                <img src="/new-logo.png" alt="Abroadly Logo" className="h-16 w-auto object-contain" />
               </div>
             </div>
 
@@ -495,7 +495,7 @@ function Home() {
             {/* Brand */}
             <div className="md:col-span-4 space-y-6">
               <div className="flex items-center bg-white p-3 rounded-xl w-max">
-                <img src="/logo.png" alt="Abroadly Logo" className="h-12 w-auto object-contain" />
+                <img src="/new-logo.png" alt="Abroadly Logo" className="h-12 w-auto object-contain" />
               </div>
               <p className="text-sm font-medium leading-relaxed">
                 Next-Generation Study Abroad Platform. We use predictive AI and conversational matching to secure your placement globally.

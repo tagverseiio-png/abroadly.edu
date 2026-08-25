@@ -1,9 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MapPin, Loader2, CheckCircle2, TrendingUp, LineChart, MessageCircle, Star, ShieldCheck, HelpCircle, Briefcase } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { countriesData } from '../data/countriesData';
-import { universitiesData } from '../data/universitiesData';
-import { programmesData } from '../data/programmes';
+import { getCountries, getUniversities, getProgrammes } from '../firebase/firestore';
 import AtlasChat from '../AtlasChat';
 
 export default function CountryDetails() {
@@ -11,33 +9,51 @@ export default function CountryDetails() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
+  // Firebase data state
+  const [allCountries, setAllCountries] = useState([]);
+  const [allUniversities, setAllUniversities] = useState([]);
+  const [allProgrammes, setAllProgrammes] = useState([]);
+
   // Active filter states
   const [activeCourseFilter, setActiveCourseFilter] = useState('All');
 
-  // Load country data
-  const country = countriesData.find(c => c.slug === slug);
-  const universities = universitiesData.filter(u => u.country === slug);
+  // Load data from Firebase
+  useEffect(() => {
+    let cancelled = false;
+    window.scrollTo(0, 0);
+    (async () => {
+      try {
+        const [countries, universities, programmes] = await Promise.all([
+          getCountries(), getUniversities(), getProgrammes()
+        ]);
+        if (!cancelled) {
+          setAllCountries(countries);
+          setAllUniversities(universities);
+          setAllProgrammes(programmes);
+        }
+      } catch (err) {
+        console.error('Firebase fetch failed:', err);
+      }
+      if (!cancelled) setLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, [slug]);
+
+  const country = allCountries.find(c => c.slug === slug);
+  const universities = allUniversities.filter(u => u.country === slug);
   
-  // Programmes filtering logic (if Malaysia, use APU data, else generate mock data based on country courses)
   const availableCourses = slug === 'malaysia' 
-    ? [...new Set(programmesData.map(p => p.field))]
+    ? [...new Set(allProgrammes.map(p => p.field))]
     : country?.courses || [];
 
   const displayProgrammes = slug === 'malaysia'
-    ? programmesData.filter(p => activeCourseFilter === 'All' || p.field === activeCourseFilter).slice(0, 12)
+    ? allProgrammes.filter(p => activeCourseFilter === 'All' || p.field === activeCourseFilter).slice(0, 12)
     : country?.courses.map((c, i) => ({
         programme_name: `BSc in ${c}`,
         level: 'Bachelor',
         duration_years: 3,
         tuition_int_rm: 40000 + (i * 5000),
       })).filter(p => activeCourseFilter === 'All' || p.programme_name.includes(activeCourseFilter)) || [];
-
-  useEffect(() => {
-    // Simulate loading for premium feel
-    window.scrollTo(0, 0);
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, [slug]);
 
   if (!loading && !country) {
     return (
@@ -77,7 +93,7 @@ export default function CountryDetails() {
         <div className="animate-in fade-in duration-700">
           
           {/* Hero Banner (Glassmorphism) */}
-          <div className="relative pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden bg-slate-900">
+          <div className="relative pt-20 pb-12 sm:pb-20 lg:pt-32 lg:pb-32 overflow-hidden bg-slate-900">
             <div className="absolute inset-0">
               <img src={country.bannerImage || country.image} alt={country.name} className="w-full h-full object-cover opacity-40 mix-blend-overlay" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
@@ -88,7 +104,7 @@ export default function CountryDetails() {
                 <span className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider rounded-full mb-6 backdrop-blur-md">
                   <MapPin className="w-3 h-3" /> Top Study Destination
                 </span>
-                <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-lg">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-lg">
                   Study in {country.name} {country.flag}
                 </h1>
                 <p className="text-xl text-slate-300 leading-relaxed max-w-2xl">
@@ -112,9 +128,9 @@ export default function CountryDetails() {
                     <span className="font-bold text-white">{country.intakes}</span>
                   </div>
                 </div>
-                <button className="w-full mt-6 bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-emerald-500/25">
+                <a href="https://wa.me/60123456789?text=Hi%2C%20I%27m%20interested%20in%20applying%20to%20universities%20in%20{country.name}." target="_blank" rel="noreferrer" className="block w-full mt-6 bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-emerald-500/25 text-center">
                   Apply Now
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -245,9 +261,9 @@ export default function CountryDetails() {
                         <span className="block text-[10px] uppercase font-bold text-slate-400">Est. Tuition</span>
                         <span className="font-bold text-slate-900">RM {prog.tuition_int_rm?.toLocaleString() || 'N/A'}</span>
                       </div>
-                      <button className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 transition-colors">
+                      <a href={`https://wa.me/60123456789?text=Hi%2C%20I%27m%20interested%20in%20the%20${encodeURIComponent(prog.name)}%20programme%20at%20${encodeURIComponent(prog.university_name)}.`} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 transition-colors">
                         <ChevronLeft className="w-5 h-5 rotate-180" />
-                      </button>
+                      </a>
                     </div>
                   </div>
                 ))}
@@ -308,9 +324,9 @@ export default function CountryDetails() {
           <section className="py-16 bg-white border-b border-slate-200 text-center">
             <h2 className="text-3xl font-extrabold text-slate-900 mb-6">Ready to apply to {country.name}?</h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-xl">
+              <a href={`https://wa.me/60123456789?text=Hi%2C%20I%27d%20like%20to%20start%20a%20free%20application%20for%20a%20university%20in%20${country.name}.`} target="_blank" rel="noreferrer" className="px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-xl text-center">
                 Start Free Application
-              </button>
+              </a>
               <a href="https://wa.me/60123456789" target="_blank" rel="noreferrer" className="px-8 py-4 bg-[#25D366] text-white font-bold rounded-xl hover:bg-[#128C7E] transition-colors shadow-xl shadow-[#25D366]/20 flex items-center justify-center gap-2">
                 <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
               </a>

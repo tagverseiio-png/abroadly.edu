@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   X, Building2, MapPin, Award, BookOpen, Clock, 
   Calendar, CheckCircle2, DollarSign, Briefcase, 
@@ -42,22 +42,22 @@ export default function ReportModal({ universities, onClose }) {
       <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-5xl relative z-10 flex flex-col max-h-full overflow-hidden border border-slate-200">
         
         {/* Header - Navy & Gold Theme */}
-        <div className="bg-slate-900 px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden shrink-0">
+        <div className="bg-slate-900 px-6 py-5 flex justify-between items-start gap-4 relative overflow-hidden shrink-0">
           <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
           
-          <div>
-            <h2 className="text-2xl font-extrabold text-white flex items-center gap-2">
-              <FileText className="w-6 h-6 text-yellow-500" />
-              Comprehensive Admission Report
+          <div className="flex-1 min-w-0 pr-10 sm:pr-0">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 shrink-0" />
+              <span className="truncate">Comprehensive Admission Report</span>
             </h2>
-            <p className="text-slate-400 text-sm font-medium mt-1 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-yellow-500/70" /> {selectedUni.location}, {selectedUni.country.charAt(0).toUpperCase() + selectedUni.country.slice(1)}
+            <p className="text-slate-400 text-xs sm:text-sm font-medium mt-1 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-yellow-500/70 shrink-0" /> <span className="truncate">{selectedUni.location}, {selectedUni.country.charAt(0).toUpperCase() + selectedUni.country.slice(1)}</span>
             </p>
           </div>
           
           <button 
             onClick={onClose} 
-            className="absolute top-5 right-5 sm:relative sm:top-0 sm:right-0 bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-full transition-colors z-20"
+            className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-full transition-colors z-20 shrink-0"
           >
             <X className="w-5 h-5" />
           </button>

@@ -103,6 +103,19 @@ export default function AtlasChat() {
           0%, 60%, 100% { transform: translateY(0); opacity: .4; }
           30% { transform: translateY(-5px); opacity: 1; }
         }
+        @media (max-width: 768px) {
+          .atlas-tooltip {
+            display: none !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .atlas-chat-panel {
+            width: calc(100vw - 24px) !important;
+            height: calc(100vh - 120px) !important;
+            right: 12px !important;
+            bottom: 80px !important;
+          }
+        }
       `}</style>
 
       {/* Floating Button */}
@@ -147,7 +160,7 @@ export default function AtlasChat() {
       </div>
 
       {/* Tooltip Label */}
-      <div style={{
+      <div className="atlas-tooltip" style={{
         position: 'fixed',
         bottom: '103px',
         right: '76px',
@@ -168,7 +181,7 @@ export default function AtlasChat() {
       </div>
 
       {/* Chat Widget Panel */}
-      <div style={{
+      <div className="atlas-chat-panel" style={{
         position: 'fixed',
         bottom: '90px',
         right: '20px',

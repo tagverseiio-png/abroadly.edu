@@ -84,9 +84,12 @@ export default function AdminEnquiries() {
             <h2 className="text-lg font-extrabold mb-4">Enquiry Details</h2>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2"><User className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Name:</span> {selected.fullName || selected.name || '-'}</div>
-              <div className="flex items-center gap-2"><Mail className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Email:</span> {selected.email}</div>
+              <div className="flex items-center gap-2"><Mail className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Email:</span> {selected.email || '-'}</div>
               {selected.phone && <div className="flex items-center gap-2"><span className="font-bold text-slate-700 ml-6">Phone:</span> {selected.phone}</div>}
-              <div className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Programme:</span> {selected.programme || '-'}</div>
+              <div className="flex items-center gap-2"><GraduationCap className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Programme:</span> {selected.programme || selected.field || '-'}</div>
+              {selected.level && <div className="flex items-center gap-2"><span className="font-bold text-slate-700 ml-6">Level:</span> {selected.level}</div>}
+              {selected.background && <div className="flex items-center gap-2"><span className="font-bold text-slate-700 ml-6">Background:</span> {selected.background}</div>}
+              {selected.budget && <div className="flex items-center gap-2"><span className="font-bold text-slate-700 ml-6">Budget:</span> {selected.budget}</div>}
               {selected.message && <div className="pt-2"><span className="font-bold text-slate-700">Message:</span><p className="mt-1 text-slate-600 whitespace-pre-wrap">{selected.message}</p></div>}
               <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-slate-400" /><span className="font-bold text-slate-700">Date:</span> {formatDate(selected.createdAt)}</div>
             </div>

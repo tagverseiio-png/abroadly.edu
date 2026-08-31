@@ -123,8 +123,8 @@ export default function AtlasChat() {
         onClick={() => setIsOpen(!isOpen)} 
         style={{
           position: 'fixed',
-          bottom: '110px',
-          right: '16px',
+          bottom: '24px',
+          right: '80px',
           width: '52px',
           height: '52px',
           background: '#1D9E75',
@@ -162,8 +162,8 @@ export default function AtlasChat() {
       {/* Tooltip Label */}
       <div className="atlas-tooltip" style={{
         position: 'fixed',
-        bottom: '123px',
-        right: '76px',
+        bottom: '37px',
+        right: '140px',
         background: '#1a1a1a',
         color: '#fff',
         fontSize: '12px',

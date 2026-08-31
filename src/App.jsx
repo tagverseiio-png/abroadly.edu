@@ -120,8 +120,8 @@ function Home() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-emerald-200 selection:text-emerald-900 relative">
       
       {/* Floating WhatsApp Button */}
-      <a href="https://wa.me/60123456789" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 group flex items-center justify-center animate-bounce" style={{ animationDuration: '3s' }}>
-        <MessageCircle className="w-7 h-7" />
+      <a href="https://wa.me/60123456789" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white w-14 h-14 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 group flex items-center justify-center animate-bounce" style={{ animationDuration: '3s' }}>
+        <MessageCircle className="w-6 h-6" />
         <span className="absolute right-full mr-4 bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
           Chat with AI Counselor
         </span>

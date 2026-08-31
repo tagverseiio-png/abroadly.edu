@@ -124,7 +124,7 @@ export default function AtlasChat() {
         style={{
           position: 'fixed',
           bottom: '24px',
-          right: '80px',
+          right: '92px',
           width: '56px',
           height: '56px',
           background: '#1D9E75',
@@ -163,7 +163,7 @@ export default function AtlasChat() {
       <div className="atlas-tooltip" style={{
         position: 'fixed',
         bottom: '37px',
-        right: '140px',
+        right: '152px',
         background: '#1a1a1a',
         color: '#fff',
         fontSize: '12px',
